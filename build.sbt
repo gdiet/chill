@@ -8,7 +8,7 @@ val kryoVersion = "4.0.1"
 val scroogeVersion = "4.12.0"
 
 val sharedSettings = mimaDefaultSettings ++ scalariformSettings ++ Seq(
-  organization := "com.twitter",
+  organization := "com.twitter.forked",
   scalaVersion := "2.11.12",
   crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.4"),
   scalacOptions ++= Seq("-unchecked", "-deprecation"),
@@ -52,9 +52,9 @@ val sharedSettings = mimaDefaultSettings ++ scalariformSettings ++ Seq(
 
   publishTo := Some(
       if (version.value.trim.toUpperCase.endsWith("SNAPSHOT"))
-        Opts.resolver.sonatypeSnapshots
+        "Artifactory" at "http://artifactory/artifactory/ext-snapshots-local;build.timestamp=" + System.currentTimeMillis()
       else
-        Opts.resolver.sonatypeStaging
+        "Artifactory" at "http://artifactory/artifactory/ext-releases-local"
     ),
   pomExtra := (
     <url>https://github.com/twitter/chill</url>
