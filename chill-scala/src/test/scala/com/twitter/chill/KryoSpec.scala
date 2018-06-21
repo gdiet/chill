@@ -101,7 +101,8 @@ class KryoSpec extends WordSpec with Matchers with BaseProperties {
         new _root_.java.util.ArrayList(Seq(1, 2, 3).asJava).asScala,
         new _root_.java.util.HashMap[Int, Int](Map(1 -> 2, 3 -> 4).asJava).asScala,
         (),
-        'hai)
+        'hai,
+        BigDecimal(1000.24))
         .asInstanceOf[List[AnyRef]]
 
       test.foreach { _ should roundtrip }
@@ -311,6 +312,14 @@ class KryoSpec extends WordSpec with Matchers with BaseProperties {
       serialize((1.0 to 10000.0 by 2.0)).size should be < (MAX_RANGE_SIZE) // some fixed size
       serialize((1.0 until 10000.0)).size should be < (MAX_RANGE_SIZE) // some fixed size
       serialize((1.0 until 10000.0 by 2.0)).size should be < (MAX_RANGE_SIZE) // some fixed size
+    }
+    "VolatileByteRef" in {
+      import scala.runtime.VolatileByteRef
+
+      val br0 = new VolatileByteRef(100: Byte)
+      br0.elem = 42: Byte
+      val br1 = rt(br0)
+      assert(br0.elem == br1.elem)
     }
   }
 }
